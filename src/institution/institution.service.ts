@@ -13,7 +13,7 @@ export class InstitutionService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} institution`;
+    return `This action returns a #${id} institutions`;
   }
 
   update(id: number, updateInstitutionDto: UpdateInstitutionDto) {
