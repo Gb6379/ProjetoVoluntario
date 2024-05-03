@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Request } from 'express';
-import { ExtractJwt } from 'passport-jwt';
+import { ExtractJwt } from 'passport-jwt'
 import { User } from 'src/user/entities/user.entity';
 import { UserPayload } from 'src/payloads/UserPayload';
 import { UserToken } from 'src/responses/UserTokenResponse';

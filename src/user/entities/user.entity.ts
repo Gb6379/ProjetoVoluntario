@@ -1,6 +1,7 @@
 import { BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from "class-transformer";
+import { Endereco } from "src/enderecos/entities/endereco.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -23,12 +24,6 @@ export class User extends BaseEntity {
     cpf: number;
 
     @Column()
-    cep: string;
-
-    @Column()
-    endereco:string;
-
-    @Column()
     phone: number;
     
     @Exclude()
@@ -39,12 +34,11 @@ export class User extends BaseEntity {
     inactivatedAt: Date;
 
 
-    //@ManyToOne(() => Role, (role) => role.users, { nullable: false })
-    //role: Role;
+    /*@ManyToOne(() => Role, (role) => role.users, { nullable: false })
+    role: Role;*/
 
-
-    //@OneToMany((type) => Product, (products) => products.user)
-    //products: Product[];
+    @OneToMany((type) => Endereco, (enderecos) => enderecos.user)
+    enderecos: Endereco[];
 
     constructor(id?: number) {
       super();

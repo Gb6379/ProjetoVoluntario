@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { InstitutionModule } from './institution/institution.module';
 import { AuthModule } from './auth/auth.module';
+import { EnderecosModule } from './enderecos/enderecos.module';
+import { JwtAuthGuard } from './auth/jwt/jwt.guard';
 
 @Module({
   imports: [
@@ -38,9 +40,10 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     InstitutionModule,
     AuthModule,
+    EnderecosModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, JwtAuthGuard],
   })
   export class AppModule {}
   
