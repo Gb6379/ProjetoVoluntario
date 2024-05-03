@@ -21,6 +21,6 @@ export class InstitutionService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} institutionS`;
+    return `This action removes a #${id} institutionSs`;
   }
 }
