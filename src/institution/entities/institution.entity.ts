@@ -12,8 +12,11 @@ export class Institution extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ type: 'text' })
     endereco: string;
+
+    @Column()
+    servicosNec: string;
 
     @Column()
     numeroVoluntariosNec: number;
