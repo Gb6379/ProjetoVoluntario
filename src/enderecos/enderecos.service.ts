@@ -19,16 +19,35 @@ export class EnderecosService {
     return await this.enderecoRepository.save(endereco);
   }
 
-  findAll() {
-    return `This action returns all enderecos`;
+  async findAllUserAdresses(userId: number): Promise<Endereco[]> {
+    return await this.enderecoRepository.find({
+      where:{
+        user: {
+          id: userId
+        }
+      }
+    })
   }
 
   findOne(id: number) {
     return `This action returns a #${id} endereco`;
   }
 
-  update(id: number, updateEnderecoDto: UpdateEnderecoDto) {
-    return `This action updates a #${id} endereco`;
+  async update(enderecoId: number, updateEnderecoDto: UpdateEnderecoDto) {//do promise here
+    const endereco = await this.enderecoRepository.findOne({
+      where: {
+        id: enderecoId,
+      }
+    })
+    endereco.cep = updateEnderecoDto.cep
+    endereco.rua = updateEnderecoDto.rua
+    endereco.bairro = updateEnderecoDto.bairro
+    endereco.numero = updateEnderecoDto.numero
+    endereco.cidade = updateEnderecoDto.cidade
+
+    await this.enderecoRepository.save(endereco)
+
+    return `This action updates a #${enderecoId} endereco`;
   }
 
   remove(id: number) {

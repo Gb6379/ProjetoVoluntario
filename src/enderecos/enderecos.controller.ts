@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { EnderecosService } from './enderecos.service';
 import { CreateEnderecoDto } from './dto/create-endereco.dto';
 import { UpdateEnderecoDto } from './dto/update-endereco.dto';
+import { Endereco } from './entities/endereco.entity';
 
 @Controller('enderecos')
 export class EnderecosController {
@@ -12,9 +13,9 @@ export class EnderecosController {
     return this.enderecosService.create(createEnderecoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.enderecosService.findAll();
+  @Get('user/:userId')
+  async findAll(@Param('userId') userId: number): Promise<Endereco[]> {
+    return await this.enderecosService.findAllUserAdresses(userId);
   }
 
   @Get(':id')
@@ -22,9 +23,9 @@ export class EnderecosController {
     return this.enderecosService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEnderecoDto: UpdateEnderecoDto) {
-    return this.enderecosService.update(+id, updateEnderecoDto);
+  @Put(':enderecoId')
+  update(@Param('enderecoId') enderecoId: number, @Body() updateEnderecoDto: UpdateEnderecoDto) {
+    return this.enderecosService.update(enderecoId, updateEnderecoDto);
   }
 
   @Delete(':id')

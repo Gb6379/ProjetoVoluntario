@@ -26,6 +26,10 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+
+## Swagger
+http://localhost:3000/api
+
 ## Installation
 
 ```bash
@@ -44,6 +48,16 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Migrations 
+
+criar: 
+    antes disso rodar npm install -g typeorm
+
+        typeorm migration:create ./migrations/migrationName   
+
+        ou rodar com npm - npm run typeorm migration:create ./migrations/migrationName 
+
 
 ## Test
 
