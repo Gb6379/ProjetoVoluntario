@@ -2,14 +2,22 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { AuthHelper } from 'src/auth/auth.helper';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ID_RESPONSE } from 'src/constants';
+import { RegisterResponse } from 'src/responses/RegisterResponse';
+@ApiTags('users')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService,
+              private readonly authHelper: AuthHelper
+  ) {}
 
+  @ApiBody({ type: CreateUserDto })
+  @ApiOkResponse(ID_RESPONSE)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<RegisterResponse> {
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
