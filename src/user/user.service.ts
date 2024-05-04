@@ -24,8 +24,10 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<RegisterResponse> {
     try {
       const password: string = PasswordUtil.createPassword()
+      console.log("passowrd", password)
       const registration: string = StringUtil.generateRandomRegistrationNumber()
       createUserDto.password = password;
+      
       createUserDto.registration = registration;
       const user = this.usersRepository.create(createUserDto)
 

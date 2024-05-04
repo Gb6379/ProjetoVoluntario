@@ -21,10 +21,10 @@ export class User extends BaseEntity {
     email: string;
 
     @Column()
-    cpf: number;
+    cpf: string;
 
     @Column()
-    phone: number;
+    phone: string;
     
     @Exclude()
     @Column({ nullable: true })
