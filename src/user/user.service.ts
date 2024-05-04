@@ -65,8 +65,10 @@ export class UserService {
         email: true,
         phone: true,
         funcao: true,
-        enderecos: true
-      }
+        },
+        relations: {
+          enderecos: true
+        }
     });
   }
 

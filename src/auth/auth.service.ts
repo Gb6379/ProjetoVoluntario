@@ -34,12 +34,27 @@ export class AuthService {
 
       async register(registerDto: RegisterDto): Promise<RegisterReponse> {
   
+        const user: CreateUserDto = {
+          name: registerDto.name,
+          email: registerDto.email,
+          cpf: registerDto.cpf,
+          phone: registerDto.phone,
+          funcao: registerDto.funcao
+
+        }
         console.log("USER",registerDto)//WORK THIS OUT
-       const u = await this.usersService.create(registerDto.user)
+       const u = await this.usersService.create(user)
 
-       registerDto.endereco.user = u.user;
+       const endereco: CreateEnderecoDto = {
+        cep: registerDto.cep,
+        rua: registerDto.rua,
+        bairro: registerDto.bairro,
+        numero: registerDto.numero,
+        cidade: registerDto.cidade,
+        user: u.user
+       }
 
-        await this.enderecoService.create(registerDto.endereco)
+        await this.enderecoService.create(endereco)
 
         return {
           message : "usuario criado com sucesso"

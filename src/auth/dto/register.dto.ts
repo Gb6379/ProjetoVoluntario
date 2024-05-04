@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Min } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber,IsOptional, IsString, Min } from "class-validator";
 import { Type } from "class-transformer";
 import { CreateEnderecoDto } from "src/enderecos/dto/create-endereco.dto";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
@@ -8,7 +8,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class RegisterDto {
 
-  /*@IsOptional()
+  @IsOptional()
   registration?: string;
 
   @IsString()
@@ -31,7 +31,6 @@ export class RegisterDto {
 
   role?: Role;
 
-
   cep: string;
 
   rua: string;
@@ -42,11 +41,5 @@ export class RegisterDto {
 
   cidade: string;
 
-  user: User;*/
-
-  @Type(() => CreateUserDto) // Use AddressDto within CreateUserDto
-  user: CreateUserDto;
-  //@ValidateNested() // Validate nested DTO
-  @Type(() => CreateEnderecoDto) // Use AddressDto within CreateUserDto
-  endereco: CreateEnderecoDto;
+  user: User;
 }
