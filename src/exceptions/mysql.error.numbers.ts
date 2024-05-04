@@ -1,0 +1,2 @@
+export const NUMBER_ER_DUP_ENTRY = 1062;
+export const NUMBER_ER_NO_REFERENCED_ROW_2 = 1452;
