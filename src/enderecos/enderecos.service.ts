@@ -4,6 +4,7 @@ import { UpdateEnderecoDto } from './dto/update-endereco.dto';
 import { Endereco } from './entities/endereco.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UpdateEnderecoResponse } from 'src/responses/UpdateEnderecoResponde';
 
 @Injectable()
 export class EnderecosService {
@@ -33,7 +34,7 @@ export class EnderecosService {
     return `This action returns a #${id} endereco`;
   }
 
-  async update(enderecoId: number, updateEnderecoDto: UpdateEnderecoDto) {//do promise here
+  async update(enderecoId: number, updateEnderecoDto: UpdateEnderecoDto): Promise<UpdateEnderecoResponse> {//do promise here
     const endereco = await this.enderecoRepository.findOne({
       where: {
         id: enderecoId,
@@ -47,10 +48,10 @@ export class EnderecosService {
 
     await this.enderecoRepository.save(endereco)
 
-    return `This action updates a #${enderecoId} endereco`;
+    return { updatedMessage : `endereco ${enderecoId} atualizado com sucesso`};
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} endereco`;
+  async remove(enderecId: number) {
+    return this.enderecoRepository.delete(enderecId)
   }
 }

@@ -24,12 +24,12 @@ export class EnderecosController {
   }
 
   @Put(':enderecoId')
-  update(@Param('enderecoId') enderecoId: number, @Body() updateEnderecoDto: UpdateEnderecoDto) {
-    return this.enderecosService.update(enderecoId, updateEnderecoDto);
+  async update(@Param('enderecoId') enderecoId: number, @Body() updateEnderecoDto: UpdateEnderecoDto) {
+    return await this.enderecosService.update(enderecoId, updateEnderecoDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.enderecosService.remove(+id);
+  @Delete(':enderecoId')
+  async remove(@Param('enderecoId') enderecoId: number) {
+    return await this.enderecosService.remove(enderecoId);
   }
 }
