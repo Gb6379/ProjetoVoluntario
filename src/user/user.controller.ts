@@ -6,6 +6,7 @@ import { AuthHelper } from 'src/auth/auth.helper';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ID_RESPONSE } from 'src/constants';
 import { RegisterResponse } from 'src/responses/RegisterResponse';
+import { DeleteResult } from 'typeorm';
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -35,8 +36,11 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
+  @ApiOkResponse({ type: DeleteResult })
+ // @UseGuards(AuthGuard(['azureAd', 'jwt']))
+  //@Roles(RoleEnum.ADMIN)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: number): Promise<DeleteResult> {
+    return this.userService.remove(id);
   }
 }

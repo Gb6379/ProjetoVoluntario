@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { DeleteResult, IsNull, Repository } from 'typeorm';
 import { checkHttpException } from 'src/exceptions/http-exception';
 import { RegisterResponse } from 'src/responses/RegisterResponse';
 import { PasswordUtil } from 'src/utils/password.util';
@@ -75,7 +75,7 @@ export class UserService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<DeleteResult> {
+    return this.usersRepository.delete(id);
   }
 }
