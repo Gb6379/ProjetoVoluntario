@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthHelper } from 'src/auth/auth.helper';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ID_RESPONSE } from 'src/constants';
-import { RegisterResponse } from 'src/responses/RegisterResponse';
+import { UserCreateResponse } from 'src/responses/UserCreateResponse';
 import { DeleteResult } from 'typeorm';
 @ApiTags('users')
 @Controller('user')
@@ -17,13 +17,13 @@ export class UserController {
   @ApiBody({ type: CreateUserDto })
   @ApiOkResponse(ID_RESPONSE)
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<RegisterResponse> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserCreateResponse> {
     return await this.userService.create(createUserDto);
   }
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.findAllVoluntaries();
   }
 
   @Get(':id')

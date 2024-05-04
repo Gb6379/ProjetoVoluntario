@@ -2,6 +2,7 @@ import { BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, Primary
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from "class-transformer";
 import { Endereco } from "src/enderecos/entities/endereco.entity";
+import { Role } from "src/role/role.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -33,9 +34,15 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     inactivatedAt: Date;
 
+    @Column()
+    funcao: string;
+
 
     /*@ManyToOne(() => Role, (role) => role.users, { nullable: false })
     role: Role;*/
+
+    @ManyToOne(() => Role, (role) => role.users)
+    role: Role;
 
     @OneToMany((type) => Endereco, (enderecos) => enderecos.user)
     enderecos: Endereco[];

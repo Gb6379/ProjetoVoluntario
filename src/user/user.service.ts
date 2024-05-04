@@ -5,10 +5,12 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, IsNull, Repository } from 'typeorm';
 import { checkHttpException } from 'src/exceptions/http-exception';
-import { RegisterResponse } from 'src/responses/RegisterResponse';
+import { UserCreateResponse } from 'src/responses/UserCreateResponse';
 import { PasswordUtil } from 'src/utils/password.util';
 import { NUMBER_ER_DUP_ENTRY } from 'src/exceptions/mysql.error.numbers';
 import { StringUtil } from 'src/utils/string.utils';
+import { Role } from 'src/role/role.entity';
+import { RoleEnum } from 'src/role/role.enum';
 
 @Injectable()
 export class UserService {
@@ -21,23 +23,24 @@ export class UserService {
   ){}
 
 
-  async create(createUserDto: CreateUserDto): Promise<RegisterResponse> {
+  async create(createUserDto: CreateUserDto): Promise<UserCreateResponse> {
     try {
+      const role: Role = new Role(createUserDto.role?.id ?? RoleEnum.VOLUNTARIO);
       const password: string = PasswordUtil.createPassword()
       console.log("passowrd", password)
       const registration: string = StringUtil.generateRandomRegistrationNumber()
       createUserDto.password = password;
-      
       createUserDto.registration = registration;
+      createUserDto.role = role;
       const user = this.usersRepository.create(createUserDto)
 
-      const userId: RegisterResponse = {
-        id: (await this.usersRepository.save(user)).id
+      const userRes: UserCreateResponse = {
+        user: (await this.usersRepository.save(user))
       }
 
       this.logger.log(`User ${createUserDto.registration} created`);
 
-      return userId;
+      return userRes;
 
     } catch (error) {
       if(error?.errno === NUMBER_ER_DUP_ENTRY) {
@@ -48,8 +51,23 @@ export class UserService {
     }
   }
 
-  async findAll() {
-    return this.usersRepository.find();
+  async findAllVoluntaries() {
+    return await this.usersRepository.find({
+      where: {
+        inactivatedAt: IsNull(),
+        role: {
+          id: RoleEnum.VOLUNTARIO
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        funcao: true,
+        enderecos: true
+      }
+    });
   }
 
   async findByEmail(email: string): Promise<User> {

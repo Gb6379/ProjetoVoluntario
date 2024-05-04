@@ -4,6 +4,11 @@ import { User } from 'src/user/entities/user.entity';
 import { AuthHelper } from './auth.helper';
 import { UserService } from 'src/user/user.service';
 import { checkHttpException } from 'src/exceptions/http-exception';
+import { EnderecosService } from 'src/enderecos/enderecos.service';
+import { RegisterDto } from './dto/register.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateEnderecoDto } from 'src/enderecos/dto/create-endereco.dto';
+import { RegisterReponse } from 'src/responses/RegisterResponse';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +18,7 @@ export class AuthService {
     constructor(
       private readonly usersService: UserService,
       private readonly authHelper: AuthHelper,
+      private readonly enderecoService: EnderecosService
     ) {}
 
 
@@ -25,6 +31,20 @@ export class AuthService {
           checkHttpException(error, this.logger);
         }
       }
+
+      async register(registerDto: RegisterDto): Promise<RegisterReponse> {
+  
+        console.log("USER",registerDto)//WORK THIS OUT
+       const u = await this.usersService.create(registerDto.user)
+
+       registerDto.endereco.user = u.user;
+
+        await this.enderecoService.create(registerDto.endereco)
+
+        return {
+          message : "usuario criado com sucesso"
+        }
+    }
 
     async validateUser(email: string, password: string): Promise<User> {
       const user = await this.usersService.findByEmail(email);

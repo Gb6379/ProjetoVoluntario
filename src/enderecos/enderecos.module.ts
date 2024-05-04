@@ -13,5 +13,6 @@ import { UserModule } from 'src/user/user.module';
   ],
   controllers: [EnderecosController],
   providers: [EnderecosService],
+  exports: [EnderecosService]
 })
 export class EnderecosModule {}

@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEnderecoDto } from './dto/create-endereco.dto';
 import { UpdateEnderecoDto } from './dto/update-endereco.dto';
+import { Endereco } from './entities/endereco.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EnderecosService {
-  create(createEnderecoDto: CreateEnderecoDto) {
-    return 'This action adds a new endereco';
+
+  constructor(
+    @InjectRepository(Endereco)
+    private readonly enderecoRepository: Repository<Endereco>,
+  ){}
+
+  async create(createEnderecoDto: CreateEnderecoDto) {
+
+    const endereco = this.enderecoRepository.create(createEnderecoDto)
+    return await this.enderecoRepository.save(endereco);
   }
 
   findAll() {

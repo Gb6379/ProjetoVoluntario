@@ -1,3 +1,3 @@
-export interface RegisterResponse {
-    id: number;
+export interface RegisterReponse {
+    message: string;
 }

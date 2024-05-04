@@ -9,6 +9,7 @@ import { InstitutionModule } from './institution/institution.module';
 import { AuthModule } from './auth/auth.module';
 import { EnderecosModule } from './enderecos/enderecos.module';
 import { JwtAuthGuard } from './auth/jwt/jwt.guard';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { JwtAuthGuard } from './auth/jwt/jwt.guard';
     InstitutionModule,
     AuthModule,
     EnderecosModule,
+    RoleModule,
     ],
     controllers: [AppController],
     providers: [AppService, JwtAuthGuard],

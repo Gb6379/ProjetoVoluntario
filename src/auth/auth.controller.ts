@@ -1,8 +1,10 @@
-import { Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserToken } from 'src/responses/UserTokenResponse';
 import { AuthService } from './auth.service';
 import { Required } from 'src/custom-decorators/required.decorator';
+import { RegisterDto } from './dto/register.dto';
+import { RegisterReponse } from 'src/responses/RegisterResponse';
 
 @Controller('auth')
 export class AuthController {
@@ -15,9 +17,10 @@ export class AuthController {
       return this.authService.login(email, password);
     }
 
-    // async register():Promise<null> {
-        
-    // }
+    @Post('register') 
+    async register(@Body() registerDto: RegisterDto):Promise<RegisterReponse> {
+        return await this.authService.register(registerDto)
+     }
   
   
 }
