@@ -8,7 +8,8 @@ export class InserRoles1714800431167 implements MigrationInterface {
             VALUES
             (null, 'VOLUNTARIO'),
             (null, 'VOLUNTARIO_ADMIN'),
-            (null, 'ADMIN')`
+            (null, 'ADMIN'),
+            (null, 'INTITUITION')`
         );
     }
 
