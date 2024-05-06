@@ -1,3 +1,3 @@
-export interface UpdateEnderecoResponse {
+export interface UpdateResponse {
     updatedMessage: string;
 }
