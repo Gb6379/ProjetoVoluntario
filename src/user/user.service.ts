@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -11,16 +11,17 @@ import { NUMBER_ER_DUP_ENTRY } from 'src/exceptions/mysql.error.numbers';
 import { StringUtil } from 'src/utils/string.utils';
 import { Role } from 'src/role/role.entity';
 import { RoleEnum } from 'src/role/role.enum';
+import { UpdateResponse } from 'src/responses/UpdateEnderecoResponde';
 
 @Injectable()
 export class UserService {
 
   private readonly logger = new Logger(UserService.name);
-  
+
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-  ){}
+  ) { }
 
 
   async create(createUserDto: CreateUserDto): Promise<UserCreateResponse> {
@@ -43,7 +44,7 @@ export class UserService {
       return userRes;
 
     } catch (error) {
-      if(error?.errno === NUMBER_ER_DUP_ENTRY) {
+      if (error?.errno === NUMBER_ER_DUP_ENTRY) {
         this.logger.error(`User already exists. ${error?.sqlMessage}`);
 
         throw new HttpException({ reason: `User already exists. [MYSQL error number: ${NUMBER_ER_DUP_ENTRY} - ${error?.sqlMessage}]` }, HttpStatus.BAD_REQUEST);
@@ -65,10 +66,10 @@ export class UserService {
         email: true,
         phone: true,
         funcao: true,
-        },
-        relations: {
-          enderecos: true
-        }
+      },
+      relations: {
+        enderecos: true
+      }
     });
   }
 
@@ -82,17 +83,38 @@ export class UserService {
           inactivatedAt: IsNull()
         }
       });
-    } catch(error) {
+    } catch (error) {
       checkHttpException(error, this.logger);
     }
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findUser(userId: number): Promise<User> {
+    try {
+      return await this.usersRepository.findOne({
+        where: {
+          id: userId
+        },
+        relations: {
+          enderecos: true,
+          role: true
+        }
+      });
+    } catch (error) {
+      checkHttpException(error, this.logger);
+    }
+
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(userId: number, updateUserDto: UpdateUserDto): Promise<UpdateResponse> {
+    const user = await this.findUser(userId)
+    if (user) {
+      Object.assign(user, updateUserDto);
+      //user.save()
+      await this.usersRepository.save(user)
+      return { updatedMessage: `usuario ${userId} atualizado com sucesso` };
+    }
+    throw new NotFoundException('Usuario nao encontrado')
+
   }
 
   async remove(id: number): Promise<DeleteResult> {

@@ -13,68 +13,58 @@ import { RegisterReponse } from 'src/responses/RegisterResponse';
 @Injectable()
 export class AuthService {
 
-    private readonly logger = new Logger(AuthService.name);
+  private readonly logger = new Logger(AuthService.name);
 
-    constructor(
-      private readonly usersService: UserService,
-      private readonly authHelper: AuthHelper,
-      private readonly enderecoService: EnderecosService
-    ) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly authHelper: AuthHelper,
+    private readonly enderecoService: EnderecosService
+  ) { }
 
 
-    async login(email: string, password: string): Promise<UserToken> {
-        try {
-          const user = await this.validateUser(email, password);
-  
-          return this.authHelper.generateToken(user);
-        } catch(error) {
-          checkHttpException(error, this.logger);
-        }
-      }
+  async login(email: string, password: string): Promise<UserToken> {
+    try {
+      const user = await this.validateUser(email, password);
 
-      async register(registerDto: RegisterDto): Promise<RegisterReponse> {
-  
-        const user: CreateUserDto = {
-          name: registerDto.name,
-          email: registerDto.email,
-          cpf: registerDto.cpf,
-          phone: registerDto.phone,
-          funcao: registerDto.funcao
-
-        }
-        console.log("USER",registerDto)//WORK THIS OUT
-       const u = await this.usersService.create(user)
-
-       const endereco: CreateEnderecoDto = {
-        cep: registerDto.cep,
-        rua: registerDto.rua,
-        bairro: registerDto.bairro,
-        numero: registerDto.numero,
-        cidade: registerDto.cidade,
-        user: u.user
-       }
-
-        await this.enderecoService.create(endereco)
-
-        return {
-          message : "usuario criado com sucesso"
-        }
+      return this.authHelper.generateToken(user);
+    } catch (error) {
+      checkHttpException(error, this.logger);
     }
+  }
 
-    async validateUser(email: string, password: string): Promise<User> {
-      const user = await this.usersService.findByEmail(email);
+  async register(registerDto: RegisterDto): Promise<RegisterReponse> {
 
-      if (!user) {
-        throw new UnauthorizedException('Usuário ou Senha Inválidos');
-      }
+    const user: CreateUserDto = Object.assign({}, registerDto);
 
-      if (this.authHelper.isPasswordValid(password, user.password)) {
-        return user;
-      }
+    const createdUser = await this.usersService.create(user)
 
+    const endereco: CreateEnderecoDto = Object.assign({}, registerDto, { user: createdUser.user });
+
+    await this.enderecoService.create(endereco)
+
+    return {
+      message: "usuario criado com sucesso"
+    }
+  }
+
+  async registerInstitutions() {
+
+  }
+
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
       throw new UnauthorizedException('Usuário ou Senha Inválidos');
     }
 
+    if (this.authHelper.isPasswordValid(password, user.password)) {
+      return user;
+    }
 
-   
+    throw new UnauthorizedException('Usuário ou Senha Inválidos');
+  }
+
+
+
 }

@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Endereco } from "src/enderecos/entities/endereco.entity";
+import { Role } from "src/role/role.entity";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Institution extends BaseEntity { 
@@ -12,13 +14,17 @@ export class Institution extends BaseEntity {
     @Column()
     name: string;
 
-    @Column({ type: 'text' })
-    endereco: string;
-
     @Column()
     servicosNec: string;
 
     @Column()
     numeroVoluntariosNec: number;
 
+    @OneToMany((type) => Endereco, (enderecos) => enderecos.user)
+    enderecos: Endereco[];
+
+    @ManyToOne(() => Role, (role) => role.institution)
+    role: Role;
+
+   
 }
