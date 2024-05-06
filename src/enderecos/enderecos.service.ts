@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEnderecoDto } from './dto/create-endereco.dto';
 import { UpdateEnderecoDto } from './dto/update-endereco.dto';
 import { Endereco } from './entities/endereco.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateEnderecoResponse } from 'src/responses/UpdateEnderecoResponde';
+import { UpdateResponse } from 'src/responses/UpdateEnderecoResponde';
 
 @Injectable()
 export class EnderecosService {
@@ -12,7 +12,7 @@ export class EnderecosService {
   constructor(
     @InjectRepository(Endereco)
     private readonly enderecoRepository: Repository<Endereco>,
-  ){}
+  ) { }
 
   async create(createEnderecoDto: CreateEnderecoDto) {
 
@@ -22,7 +22,7 @@ export class EnderecosService {
 
   async findAllUserAdresses(userId: number): Promise<Endereco[]> {
     return await this.enderecoRepository.find({
-      where:{
+      where: {
         user: {
           id: userId
         }
@@ -30,25 +30,24 @@ export class EnderecosService {
     })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} endereco`;
+  async findAddress(addressId: number): Promise<Endereco> {
+    return await this.enderecoRepository.findOne({
+      where: {
+        id: addressId
+      }
+    });
   }
 
-  async update(enderecoId: number, updateEnderecoDto: UpdateEnderecoDto): Promise<UpdateEnderecoResponse> {//do promise here
-    const endereco = await this.enderecoRepository.findOne({
-      where: {
-        id: enderecoId,
-      }
-    })
-    endereco.cep = updateEnderecoDto.cep
-    endereco.rua = updateEnderecoDto.rua
-    endereco.bairro = updateEnderecoDto.bairro
-    endereco.numero = updateEnderecoDto.numero
-    endereco.cidade = updateEnderecoDto.cidade
+  async update(enderecoId: number, updateEnderecoDto: UpdateEnderecoDto): Promise<UpdateResponse> {//do promise here
+    const endereco = await this.findAddress(enderecoId);
+    if (endereco) {
+      Object.assign(endereco, updateEnderecoDto);
 
-    await this.enderecoRepository.save(endereco)
+      await this.enderecoRepository.save(endereco)
 
-    return { updatedMessage : `endereco ${enderecoId} atualizado com sucesso`};
+      return { updatedMessage: `endereco ${enderecoId} atualizado com sucesso` };
+    }
+    throw new NotFoundException('Endereco nao encontrado')
   }
 
   async remove(enderecId: number) {

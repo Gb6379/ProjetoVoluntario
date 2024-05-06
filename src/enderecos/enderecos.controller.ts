@@ -18,9 +18,9 @@ export class EnderecosController {
     return await this.enderecosService.findAllUserAdresses(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.enderecosService.findOne(+id);
+  @Get(':addressId')
+  findOne(@Param('addressId') addressId: number): Promise<Endereco> {
+    return this.enderecosService.findAddress(addressId);
   }
 
   @Put(':enderecoId')

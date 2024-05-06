@@ -1,3 +1,4 @@
+import { Institution } from "src/institution/entities/institution.entity";
 import { User } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -21,6 +22,9 @@ export class Endereco {
     @Column()
     cidade: string;
 
-    @ManyToOne(() => User, (user) => user.enderecos, { nullable: false })
+    @ManyToOne(() => User, (user) => user.enderecos, { nullable: true })
     user: User;
+
+    @ManyToOne(() => Institution, (institution) => institution.enderecos, { nullable: true })
+    institution: Institution;
 }
