@@ -14,7 +14,13 @@ export class EnderecosService {
     private readonly enderecoRepository: Repository<Endereco>,
   ) { }
 
-  async create(createEnderecoDto: CreateEnderecoDto) {
+  async addEnderecoVoluntario(createEnderecoDto: CreateEnderecoDto) {
+
+    const endereco = this.enderecoRepository.create(createEnderecoDto)
+    return await this.enderecoRepository.save(endereco);
+  }
+
+  async addEnderecoInstitution(createEnderecoDto: CreateEnderecoDto) {
 
     const endereco = this.enderecoRepository.create(createEnderecoDto)
     return await this.enderecoRepository.save(endereco);
@@ -29,6 +35,18 @@ export class EnderecosService {
       }
     })
   }
+
+  
+  async findAllInstitutionAdresses(institutionId: number): Promise<Endereco[]> {
+    return await this.enderecoRepository.find({
+      where: {
+        institution: {
+          id: institutionId
+        }
+      }
+    })
+  }
+
 
   async findAddress(addressId: number): Promise<Endereco> {
     return await this.enderecoRepository.findOne({

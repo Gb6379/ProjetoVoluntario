@@ -16,6 +16,9 @@ export class Institution extends BaseEntity {
     @Column({ unique: true })
     name: string;
 
+    @Column()
+    tipo: string;
+
     @Column({ unique: true })
     email: string;
 
