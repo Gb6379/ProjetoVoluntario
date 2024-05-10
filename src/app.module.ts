@@ -12,6 +12,11 @@ import { JwtAuthGuard } from './auth/jwt/jwt.guard';
 import { RoleModule } from './role/role.module';
 import { HttpModule } from '@nestjs/axios';
 import { PassportModule } from '@nestjs/passport';
+import { User } from './user/entities/user.entity';
+import { Institution } from './institution/entities/institution.entity';
+import { Endereco } from './enderecos/entities/endereco.entity';
+import { Role } from './role/role.entity';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -27,7 +32,7 @@ import { PassportModule } from '@nestjs/passport';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [User, Institution, Endereco, Role],
       synchronize: true,//sets to false on production
       autoLoadEntities: true,
       logging: [
@@ -50,5 +55,7 @@ import { PassportModule } from '@nestjs/passport';
     controllers: [AppController],
     providers: [AppService, JwtAuthGuard],
   })
-  export class AppModule {}
+  export class AppModule {
+    constructor(private dataSource: DataSource){}
+  }
   

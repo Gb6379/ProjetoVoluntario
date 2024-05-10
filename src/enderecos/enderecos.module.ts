@@ -4,11 +4,13 @@ import { EnderecosController } from './enderecos.controller';
 import { Endereco } from './entities/endereco.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
+import { InstitutionModule } from 'src/institution/institution.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Endereco]),  
-    UserModule
+    UserModule,
+    InstitutionModule
     //PassportModule.register({defaultStrategy: 'azureAd'}),
   ],
   controllers: [EnderecosController],

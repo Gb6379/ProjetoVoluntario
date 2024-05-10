@@ -83,6 +83,9 @@ export class UserService {
         where: {
           email,
           inactivatedAt: IsNull()
+        },
+        relations: {
+          role: true
         }
       });
     } catch (error) {

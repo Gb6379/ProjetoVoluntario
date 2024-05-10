@@ -73,6 +73,9 @@ export class InstitutionService {
       return await this.institutionRepository.findOne({
         where: {
           email,
+        },
+        relations: {
+          role: true
         }
       });
     } catch (error) {

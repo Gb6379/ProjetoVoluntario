@@ -31,14 +31,19 @@ export class RegisterDto {
 
   role?: Role;
 
+  @IsString()
   cep: string;
 
+  @IsString()
   rua: string;
 
+  @IsString()
   bairro: string;
 
+  @IsString()
   numero: number;
 
+  @IsString()
   cidade: string;
 
   user: User;

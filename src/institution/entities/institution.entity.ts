@@ -2,6 +2,7 @@ import { Exclude } from "class-transformer";
 import { Endereco } from "src/enderecos/entities/endereco.entity";
 import { Role } from "src/role/role.entity";
 import { BaseEntity, BeforeInsert, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { IsString, IsNotEmpty, Length, IsOptional, IsNumber } from "class-validator";
 import * as bcrypt from 'bcryptjs';
 
 @Entity()
@@ -15,6 +16,13 @@ export class Institution extends BaseEntity {
 
     @Column({ unique: true })
     name: string;
+
+    @Column({ unique: true })
+    cnpj: string;
+
+    @IsOptional()
+    @Column()
+    info: string;
 
     @Column()
     tipo: string;
@@ -31,9 +39,6 @@ export class Institution extends BaseEntity {
 
     @Column()
     itensNecessarios: string;
-
-    @Column()
-    numeroVoluntariosNec: number;
 
     @Column()
     voluntarioStatus: string;

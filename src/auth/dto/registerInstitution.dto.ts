@@ -18,6 +18,9 @@ export class RegisterInstitutionDto {
   cnpj: string
 
   @IsString()
+  tipo: string;
+
+  @IsString()
   info: string;
 
   @ApiProperty({ required: false })
@@ -37,9 +40,6 @@ export class RegisterInstitutionDto {
 
   @IsString()
   servicosNecessarios: string;
-
-  @IsString()
-  numeroVoluntariosNec: number;
 
   role?: Role;
 

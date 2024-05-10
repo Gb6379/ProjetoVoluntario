@@ -48,7 +48,7 @@ export class AuthService {
 
     const endereco: CreateEnderecoDto = Object.assign({}, registerDto, { user: createdUser.user });
 
-    await this.enderecoService.addEnderecoVoluntario(endereco)
+    await this.enderecoService.onlySaveAddres(endereco)
 
     return {
       message: "usuario criado com sucesso"
@@ -62,7 +62,7 @@ export class AuthService {
 
       const endereco: CreateEnderecoDto = Object.assign({}, registerInsitituionDto, { institution: createdInstitution.institution });
 
-      await this.enderecoService.addEnderecoInstitution(endereco)
+      await this.enderecoService.onlySaveAddres(endereco)
 
       return {
         message: "instituicao criada com sucesso"

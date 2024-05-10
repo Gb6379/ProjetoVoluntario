@@ -33,10 +33,11 @@ export class AuthHelper {
   }
 
   // Generate user JWT Token
-  public generateToken(user?: User): UserToken {
+  public generateToken(user: User): UserToken {
+    console.log("GENERATE USER TOKEN", user)
     const payload: UserPayload = {
       id: user.id,
-      //roleId: user.role.id,
+      roleId: user.role.id,
     };
 
     return {
@@ -47,7 +48,7 @@ export class AuthHelper {
   public generateInstitutionToken(institution: Institution): UserToken {
     const payload: UserPayload = {
       id: institution.id,
-      //roleId: user.role.id,
+      roleId: institution.role.id,
     };
 
     return {
