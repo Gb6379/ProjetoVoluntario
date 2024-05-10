@@ -10,11 +10,13 @@ import { AuthModule } from './auth/auth.module';
 import { EnderecosModule } from './enderecos/enderecos.module';
 import { JwtAuthGuard } from './auth/jwt/jwt.guard';
 import { RoleModule } from './role/role.module';
+import { HttpModule } from '@nestjs/axios';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    //PassportModule.register({defaultStrategy: 'jwt'}),
+    PassportModule.register({defaultStrategy: 'jwt'}),
     ConfigModule.forRoot({
       isGlobal: true
     }),
@@ -38,6 +40,7 @@ import { RoleModule } from './role/role.module';
       migrations: ['dist/migrations/*.js'],
       migrationsRun: true
     }),
+    HttpModule,
     UserModule,
     InstitutionModule,
     AuthModule,

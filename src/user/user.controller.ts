@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -7,6 +7,7 @@ import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ID_RESPONSE } from 'src/constants';
 import { UserCreateResponse } from 'src/responses/UserCreateResponse';
 import { DeleteResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -21,14 +22,15 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard(['jwt']))
   @Get()
-  findAll() {
-    return this.userService.findAllVoluntaries();
+  async findAll() {
+    return await this.userService.findAllVoluntaries();
   }
 
   @Get(':userId')
-  findOne(@Param('userId') userId: number) {
-    return this.userService.findUser(userId);
+  async findOne(@Param('userId') userId: number) {
+    return await this.userService.findUser(userId);
   }
 
   @Put(':userId')
@@ -41,6 +43,6 @@ export class UserController {
   //@Roles(RoleEnum.ADMIN)
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<DeleteResult> {
-    return this.userService.remove(id);
+    return await this.userService.remove(id);
   }
 }

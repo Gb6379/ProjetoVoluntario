@@ -8,6 +8,7 @@ import { ExtractJwt } from 'passport-jwt'
 import { User } from 'src/user/entities/user.entity';
 import { UserPayload } from 'src/payloads/UserPayload';
 import { UserToken } from 'src/responses/UserTokenResponse';
+import { Institution } from 'src/institution/entities/institution.entity';
 
 
 @Injectable()
@@ -31,10 +32,21 @@ export class AuthHelper {
     return this.repository.findOne(decoded.id);
   }
 
-  // Generate JWT Token
-  public generateToken(user: User): UserToken {
+  // Generate user JWT Token
+  public generateToken(user?: User): UserToken {
     const payload: UserPayload = {
       id: user.id,
+      //roleId: user.role.id,
+    };
+
+    return {
+      access_token: this.jwt.sign(payload, { secret: process.env.JWT_SECRET })
+    };
+  }
+
+  public generateInstitutionToken(institution: Institution): UserToken {
+    const payload: UserPayload = {
+      id: institution.id,
       //roleId: user.role.id,
     };
 

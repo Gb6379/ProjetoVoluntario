@@ -11,12 +11,14 @@ import { AuthHelper } from './auth.helper';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { LocalStrategy } from './local/local.guard';
 import { EnderecosModule } from 'src/enderecos/enderecos.module';
+import { InstitutionModule } from 'src/institution/institution.module';
 
 @Module({
   imports: [
     HttpModule,
     UserModule, 
     EnderecosModule,
+    InstitutionModule,
     PassportModule.register({defaultStrategy: 'azureAd'}),
     JwtModule.register({ secret: 'secretKey',
     signOptions: { expiresIn: '60s' },}), 

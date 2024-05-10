@@ -11,5 +11,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [InstitutionController],
   providers: [InstitutionService],
+  exports: [InstitutionService]
 })
 export class InstitutionModule {}

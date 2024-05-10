@@ -9,6 +9,10 @@ import { RegisterDto } from './dto/register.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { CreateEnderecoDto } from 'src/enderecos/dto/create-endereco.dto';
 import { RegisterReponse } from 'src/responses/RegisterResponse';
+import { CreateInstitutionDto } from 'src/institution/dto/create-institution.dto';
+import { RegisterInstitutionDto } from './dto/registerInstitution.dto';
+import { InstitutionService } from 'src/institution/institution.service';
+import { ValidadeLoginResponse } from 'src/responses/validadeLoginResponse';
 
 @Injectable()
 export class AuthService {
@@ -18,15 +22,19 @@ export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly authHelper: AuthHelper,
-    private readonly enderecoService: EnderecosService
+    private readonly enderecoService: EnderecosService,
+    private readonly institutionService: InstitutionService
   ) { }
 
 
   async login(email: string, password: string): Promise<UserToken> {
     try {
-      const user = await this.validateUser(email, password);
-
-      return this.authHelper.generateToken(user);
+      console.log(email,password)
+      const subject = await this.validateUser(email, password);
+      if(subject instanceof User) {
+        return this.authHelper.generateToken(subject);
+      }
+        return this.authHelper.generateInstitutionToken(subject)
     } catch (error) {
       checkHttpException(error, this.logger);
     }
@@ -47,24 +55,39 @@ export class AuthService {
     }
   }
 
-  async registerInstitutions() {
+  async registerInstitutions(registerInsitituionDto: RegisterInstitutionDto):Promise<RegisterReponse> {
+      const institution: CreateInstitutionDto = Object.assign({}, registerInsitituionDto)
 
+      const createdInstitution = await this.institutionService.create(institution)
+
+      const endereco: CreateEnderecoDto = Object.assign({}, registerInsitituionDto, { institution: createdInstitution.institution });
+
+      await this.enderecoService.create(endereco)
+
+      return {
+        message: "instituicao criada com sucesso"
+      }
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
+  async validateUser(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
-
-    if (!user) {
-      throw new UnauthorizedException('Usuário ou Senha Inválidos');
+    const inst = await this.institutionService.findInstitutionByEmail(email)
+    if (user) {
+      if (this.authHelper.isPasswordValid(password, user.password)) {
+        return user;
+      }
+      
     }
 
-    if (this.authHelper.isPasswordValid(password, user.password)) {
-      return user;
+    else if(inst) {
+      if (this.authHelper.isPasswordValid(password, inst.password)) {
+        return inst;
     }
+   
 
-    throw new UnauthorizedException('Usuário ou Senha Inválidos');
+    //throw new UnauthorizedException('Usuário ou Senha Inválidos');
   }
 
-
+  }
 
 }

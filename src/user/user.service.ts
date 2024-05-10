@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -12,6 +12,7 @@ import { StringUtil } from 'src/utils/string.utils';
 import { Role } from 'src/role/role.entity';
 import { RoleEnum } from 'src/role/role.enum';
 import { UpdateResponse } from 'src/responses/UpdateEnderecoResponde';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class UserService {
@@ -51,6 +52,7 @@ export class UserService {
       }
     }
   }
+
 
   async findAllVoluntaries() {
     return await this.usersRepository.find({
