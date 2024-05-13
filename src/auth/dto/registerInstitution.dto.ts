@@ -12,6 +12,9 @@ export class RegisterInstitutionDto {
   email: string;
 
   @IsString()
+  password: string;
+
+  @IsString()
   phone: string;
 
   @IsString()
@@ -22,9 +25,6 @@ export class RegisterInstitutionDto {
 
   @IsString()
   info: string;
-
-  @ApiProperty({ required: false })
-  password?: string;
 
   @IsString()
   hours: string;

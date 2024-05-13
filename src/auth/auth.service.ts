@@ -41,9 +41,9 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<RegisterReponse> {
-
+    console.log("REGISTER DTO", registerDto)
     const user: CreateUserDto = Object.assign({}, registerDto);
-
+    
     const createdUser = await this.usersService.create(user)
 
     const endereco: CreateEnderecoDto = Object.assign({}, registerDto, { user: createdUser.user });

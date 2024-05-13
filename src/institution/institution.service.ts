@@ -27,10 +27,10 @@ export class InstitutionService {
   async create(createInstitutionDto: CreateInstitutionDto) {
     try {
       const role: Role = new Role(createInstitutionDto.role?.id ?? RoleEnum.INTITUITION);
-      const password: string = PasswordUtil.createPassword()
-      console.log("passowrd", password)
+      //const password: string = PasswordUtil.createPassword()
+     // console.log("passowrd", password)
       
-      createInstitutionDto.password = password;
+      //.password = password;
 
       createInstitutionDto.role = role;
       const user = this.institutionRepository.create(createInstitutionDto)

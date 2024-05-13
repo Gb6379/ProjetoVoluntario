@@ -31,7 +31,7 @@ export class Institution extends BaseEntity {
     email: string;
 
     @Exclude()
-    @Column({ nullable: true })
+    @Column({ nullable: false })
     password: string;
 
     @Column()

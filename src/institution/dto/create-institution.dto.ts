@@ -18,8 +18,8 @@ export class CreateInstitutionDto {
     @IsString()
     info: string;
   
-    @ApiProperty({ required: false })
-    password?: string;
+    @IsString()
+    password: string;
   
     @IsString()
     hours: string;

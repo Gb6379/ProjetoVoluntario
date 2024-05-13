@@ -18,6 +18,9 @@ export class RegisterDto {
   email: string;
 
   @IsString()
+  password: string;
+
+  @IsString()
   phone: string;
 
   @IsString()
@@ -25,9 +28,6 @@ export class RegisterDto {
 
   @IsString()
   funcao: string;
-
-  @ApiProperty({ required: false })
-  password?: string;
 
   role?: Role;
 
