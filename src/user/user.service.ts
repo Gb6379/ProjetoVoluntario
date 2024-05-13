@@ -53,6 +53,23 @@ export class UserService {
     }
   }
 
+  async filterByName(name: string) {
+    try {
+      const vol = await this.usersRepository.find({
+        where: {
+          name: name
+        },
+        relations: {
+          enderecos: true
+        }
+       })
+     return vol;
+    } catch (error) {
+      checkHttpException(error, this.logger);
+    }
+  
+  }
+
 
   async findAllVoluntaries() {
     return await this.usersRepository.find({
@@ -91,6 +108,10 @@ export class UserService {
     } catch (error) {
       checkHttpException(error, this.logger);
     }
+  }
+
+  async findUserByName () {
+    
   }
 
   async findUser(userId: number): Promise<User> {

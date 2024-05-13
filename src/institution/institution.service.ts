@@ -66,6 +66,57 @@ export class InstitutionService {
     }); ;
   }
 
+  async findShelter() {
+    console.log("wu")
+    try {
+      const institutions = await this.institutionRepository.find({
+        where: {
+          tipo: 'abrigo'
+        },
+        relations: {
+          enderecos: true
+        }
+       })
+     return institutions;
+    } catch (error) {
+      checkHttpException(error, this.logger);
+    }
+  
+  }
+
+  async filterByName(name: string) {
+    console.log("ENTREI FIND BY NAME")
+    try {
+      return this.institutionRepository.find({
+        where: {
+          name: name
+        },
+        relations: {
+          enderecos: true
+        }
+      })
+    } catch (error) {
+      checkHttpException(error, this.logger);
+    }
+  }
+
+  async findPickupSpot() {
+    try {
+      const institutions = await this.institutionRepository.find({
+        where: {
+          tipo: 'ponto de coleta'
+        },
+        relations: {
+          enderecos: true
+        }
+       })
+      return institutions;
+    } catch (error) {
+      checkHttpException(error, this.logger);
+    }
+    
+  }
+
   async findInstitutionByEmail(email: string): Promise<Institution> {
     try {
       this.logger.log(`Searching institution ${email}`);

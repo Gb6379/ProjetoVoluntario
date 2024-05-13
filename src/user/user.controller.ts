@@ -8,6 +8,7 @@ import { ID_RESPONSE } from 'src/constants';
 import { UserCreateResponse } from 'src/responses/UserCreateResponse';
 import { DeleteResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
+import { ParamRequired } from 'src/custom-decorators/param-required.decorator';
 @ApiTags('users')
 @Controller('user')
 export class UserController {
@@ -26,6 +27,12 @@ export class UserController {
   @Get()
   async findAll() {
     return await this.userService.findAllVoluntaries();
+  }
+
+  
+  @Get('filter')
+  async findByName(@ParamRequired("name") name: string){
+    return this.userService.filterByName(name)
   }
 
   @Get(':userId')
